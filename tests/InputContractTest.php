@@ -8,17 +8,17 @@ trait InputContractTest
 
     abstract protected function getTestSubjectType();
 
-    protected function elementRegExp($attributes)
+    protected function elementRegExp(string $attributes): string
     {
-        return '/\A<input type="' . $this->getTestSubjectType() . '" .*?' . $attributes . '( .*?|)>\z/';
+        return '/\A<input type="'.$this->getTestSubjectType().'" .*?'.$attributes.'( .*?|)>\z/';
     }
 
-    public function testTextCanBeCreated()
+    public function test_text_can_be_created(): void
     {
         $this->assertNotNull($this->newTestSubjectInstance('email'));
     }
 
-    public function testRequired()
+    public function test_required(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->required()->render();
@@ -27,7 +27,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('required="required"'), $result, $message);
     }
 
-    public function testConditionalRequired()
+    public function test_conditional_required(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->required(false)->render();
@@ -36,7 +36,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('required="required"'), $result, $message);
     }
 
-    public function testAutofocus()
+    public function test_autofocus(): void
     {
         $text = $this->newTestSubjectInstance('');
         $result = $text->autofocus()->render();
@@ -45,7 +45,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('autofocus="autofocus"'), $result, $message);
     }
 
-    public function testUnfocus()
+    public function test_unfocus(): void
     {
         $pattern = 'autofocus="autofocus"';
 
@@ -62,7 +62,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp($pattern), $result, $message);
     }
 
-    public function testOptional()
+    public function test_optional(): void
     {
         $pattern = 'required="required"';
 
@@ -79,7 +79,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp($pattern), $result, $message);
     }
 
-    public function testDisable()
+    public function test_disable(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->disable()->render();
@@ -88,7 +88,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('disabled="disabled"'), $result, $message);
     }
 
-    public function testConditionalDisable()
+    public function test_conditional_disable(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->required(false)->render();
@@ -97,7 +97,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('disabled="disabled"'), $result, $message);
     }
 
-    public function testReadyOnly()
+    public function test_ready_only(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->readonly()->render();
@@ -106,7 +106,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('readonly="readonly"'), $result, $message);
     }
 
-    public function testConditionalReadyOnly()
+    public function test_conditional_ready_only(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->required(false)->render();
@@ -115,7 +115,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('readonly="readonly"'), $result, $message);
     }
 
-    public function testEnableDisabled()
+    public function test_enable_disabled(): void
     {
         $pattern = 'disabled="disabled"';
 
@@ -132,7 +132,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('disabled="disabled"'), $result, $message);
     }
 
-    public function testEnableReadOnly()
+    public function test_enable_read_only(): void
     {
         $pattern = 'readonly="readonly"';
 
@@ -149,7 +149,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('readonly="readonly"'), $result, $message);
     }
 
-    public function testCanBeCastToString()
+    public function test_can_be_cast_to_string(): void
     {
         $text = $this->newTestSubjectInstance('email');
 
@@ -159,7 +159,7 @@ trait InputContractTest
         $this->assertEquals($expected, $result, $message);
     }
 
-    public function testCanRenderBasicFormControl()
+    public function test_can_render_basic_form_control(): void
     {
         $text = $this->newTestSubjectInstance('email');
 
@@ -174,7 +174,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('name="first_name"'), $result, $message);
     }
 
-    public function testCanRenderWithId()
+    public function test_can_render_with_id(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $text = $text->id('email_field');
@@ -191,7 +191,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('id="name_field"'), $result, $message);
     }
 
-    public function testCanRenderWithValue()
+    public function test_can_render_with_value(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $text = $text->value('example@example.com');
@@ -215,7 +215,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('value="test@test.com"'), $result, $message);
     }
 
-    public function testCanRenderWithClass()
+    public function test_can_render_with_class(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $text = $text->addClass('error');
@@ -232,7 +232,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('class="success"'), $result, $message);
     }
 
-    public function testCanRenderWithPlaceholder()
+    public function test_can_render_with_placeholder(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $text = $text->placeholder('error');
@@ -249,7 +249,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('placeholder="success"'), $result, $message);
     }
 
-    public function testCustomAttribute()
+    public function test_custom_attribute(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->attribute('custom', 'test-value')->render();
@@ -262,7 +262,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('custom="test-value"'), $result, $message);
     }
 
-    public function testDataAttribute()
+    public function test_data_attribute(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->data('sample', 'test-value')->render();
@@ -277,7 +277,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('data-custom="another-value"'), $result, $message);
     }
 
-    public function testArrayOfDataAttributes()
+    public function test_array_of_data_attributes(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->data(['custom' => 'value', 'other' => 'value2'])->render();
@@ -288,7 +288,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('data-other="value2"'), $result, $message);
     }
 
-    public function testCanRemoveClass()
+    public function test_can_remove_class(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $text = $text->addClass('error');
@@ -316,7 +316,7 @@ trait InputContractTest
         $this->assertDoesNotMatchRegularExpression($this->elementRegExp('class'), $result, $message);
     }
 
-    public function testCanAddAttributesThroughMagicMethods()
+    public function test_can_add_attributes_through_magic_methods(): void
     {
         $text = $this->newTestSubjectInstance('email');
         $result = $text->maxlength('5')->render();
@@ -325,7 +325,7 @@ trait InputContractTest
         $this->assertMatchesRegularExpression($this->elementRegExp('maxlength="5"'), $result, $message);
     }
 
-    public function testCanAddAttributesThroughMagicMethodsWithOptionalParameter()
+    public function test_can_add_attributes_through_magic_methods_with_optional_parameter(): void
     {
         $text = $this->newTestSubjectInstance('cow');
         $result = $text->moo()->render();

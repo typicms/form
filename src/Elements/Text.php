@@ -17,7 +17,7 @@ class Text extends Input
 
     public function defaultValue(string $value): self
     {
-        if (!$this->hasValue()) {
+        if (! $this->hasValue()) {
             $this->setValue($value);
         }
 

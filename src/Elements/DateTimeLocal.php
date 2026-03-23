@@ -21,10 +21,11 @@ class DateTimeLocal extends Text
 
     public function defaultValue(mixed $value): self
     {
-        if (!$this->hasValue()) {
+        if (! $this->hasValue()) {
             if ($value instanceof DateTime) {
                 $value = $value->format('Y-m-d\TH:i');
             }
+
             $this->setValue($value);
         }
 

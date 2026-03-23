@@ -14,17 +14,17 @@ class RadioButtonTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): RadioButton
     {
         return new RadioButton($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'radio';
     }
 
-    public function testDefaultToChecked()
+    public function test_default_to_checked(): void
     {
         $checkbox = new RadioButton('above_18');
         $expected = '<input type="radio" name="above_18" value="above_18" checked="checked">';
@@ -45,7 +45,7 @@ class RadioButtonTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDefaultToUnchecked()
+    public function test_default_to_unchecked(): void
     {
         $checkbox = new RadioButton('above_18');
         $expected = '<input type="radio" name="above_18" value="above_18">';

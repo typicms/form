@@ -14,17 +14,17 @@ class NumberTest extends TestCase
 {
     use TextSubclassContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Number
     {
         return new Number($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'number';
     }
 
-    public function testDefaultValue()
+    public function test_default_value(): void
     {
         $number = new Number('number');
         $number->defaultValue(0);
@@ -33,7 +33,7 @@ class NumberTest extends TestCase
         $this->assertSame($expected, $number->render());
     }
 
-    public function testMinValue()
+    public function test_min_value(): void
     {
         $number = new Number('number');
         $number->min(5);
@@ -42,7 +42,7 @@ class NumberTest extends TestCase
         $this->assertSame($expected, $number->render());
     }
 
-    public function testMaxValue()
+    public function test_max_value(): void
     {
         $number = new Number('number');
         $number->max(10);
@@ -51,7 +51,7 @@ class NumberTest extends TestCase
         $this->assertSame($expected, $number->render());
     }
 
-    public function testStepValue()
+    public function test_step_value(): void
     {
         $number = new Number('number');
         $number->step(1);
@@ -60,7 +60,7 @@ class NumberTest extends TestCase
         $this->assertSame($expected, $number->render());
     }
 
-    public function testPlaceholderValue()
+    public function test_placeholder_value(): void
     {
         $number = new Number('number');
         $number->placeholder('Number');

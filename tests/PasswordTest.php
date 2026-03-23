@@ -14,12 +14,12 @@ class PasswordTest extends TestCase
 {
     use TextSubclassContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Password
     {
         return new Password($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'password';
     }

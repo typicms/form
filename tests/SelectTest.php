@@ -14,21 +14,19 @@ class SelectTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Select
     {
         return new Select($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType() {}
+
+    protected function elementRegExp(string $attributes): string
     {
+        return '/\A<select .*?'.$attributes.'( .*?|)><\/select>\z/';
     }
 
-    protected function elementRegExp($attributes)
-    {
-        return '/\A<select .*?' . $attributes . '( .*?|)><\/select>\z/';
-    }
-
-    public function testSelectCanBeCreatedWithOptions()
+    public function test_select_can_be_created_with_options(): void
     {
         $select = new Select('birth_year', [1990, 1991, 1992]);
         $expected = '<select name="birth_year"><option value="0">1990</option><option value="1">1991</option><option value="2">1992</option></select>';
@@ -43,7 +41,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSelectCanBeCreatedWithKeyValueOptions()
+    public function test_select_can_be_created_with_key_value_options(): void
     {
         $select = new Select('color', ['red' => 'Red', 'blue' => 'Blue']);
         $expected = '<select name="color"><option value="red">Red</option><option value="blue">Blue</option></select>';
@@ -58,10 +56,11 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanAddOption()
+    public function test_can_add_option(): void
     {
         $select = new Select('color', ['red' => 'Red']);
         $select->addOption('blue', 'Blue');
+
         $expected = '<select name="color"><option value="red">Red</option><option value="blue">Blue</option></select>';
         $result = $select->render();
 
@@ -69,16 +68,18 @@ class SelectTest extends TestCase
 
         $select = new Select('fruit', ['apple' => 'Granny Smith']);
         $select->addOption('berry', 'Blueberry');
+
         $expected = '<select name="fruit"><option value="apple">Granny Smith</option><option value="berry">Blueberry</option></select>';
         $result = $select->render();
 
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSetOptions()
+    public function test_can_set_options(): void
     {
         $select = new Select('color');
         $select->options(['red' => 'Red', 'blue' => 'Blue']);
+
         $expected = '<select name="color"><option value="red">Red</option><option value="blue">Blue</option></select>';
         $result = $select->render();
 
@@ -86,16 +87,18 @@ class SelectTest extends TestCase
 
         $select = new Select('fruit');
         $select->options(['apple' => 'Granny Smith', 'berry' => 'Blueberry']);
+
         $expected = '<select name="fruit"><option value="apple">Granny Smith</option><option value="berry">Blueberry</option></select>';
         $result = $select->render();
 
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSetSelectedOption()
+    public function test_can_set_selected_option(): void
     {
         $select = new Select('color');
         $select->options(['red' => 'Red', 'blue' => 'Blue']);
+
         $expected = '<select name="color"><option value="red">Red</option><option value="blue" selected>Blue</option></select>';
         $result = $select->select('blue')->render();
 
@@ -103,16 +106,18 @@ class SelectTest extends TestCase
 
         $select = new Select('fruit');
         $select->options(['apple' => 'Granny Smith', 'berry' => 'Blueberry']);
+
         $expected = '<select name="fruit"><option value="apple" selected>Granny Smith</option><option value="berry">Blueberry</option></select>';
         $result = $select->select('apple')->render();
 
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSelectNumericKeys()
+    public function test_can_select_numeric_keys(): void
     {
         $select = new Select('fruit');
         $select->options(['1' => 'Granny Smith', '2' => 'Blueberry']);
+
         $expected = '<select name="fruit"><option value="1" selected>Granny Smith</option><option value="2">Blueberry</option></select>';
         $result = $select->select('1')->render();
 
@@ -120,13 +125,14 @@ class SelectTest extends TestCase
 
         $select = new Select('fruit');
         $select->options(['1' => 'Granny Smith', '2' => 'Blueberry']);
+
         $expected = '<select name="fruit"><option value="1">Granny Smith</option><option value="2" selected>Blueberry</option></select>';
         $result = $select->select('2')->render();
 
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSetDefaultOption()
+    public function test_can_set_default_option(): void
     {
         $select = new Select('color', ['red' => 'Red', 'blue' => 'Blue']);
         $expected = '<select name="color"><option value="red">Red</option><option value="blue" selected>Blue</option></select>';
@@ -153,7 +159,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSetDefaultOptionMultiselect()
+    public function test_can_set_default_option_multiselect(): void
     {
         $select = new Select('color', ['red' => 'Red', 'blue' => 'Blue']);
         $expected = '<select name="color"><option value="red" selected>Red</option><option value="blue" selected>Blue</option></select>';
@@ -180,7 +186,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanUseNestedOptions()
+    public function test_can_use_nested_options(): void
     {
         $options = [
             'Ontario' => [
@@ -199,7 +205,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanUseNestedOptionsWithoutKeys()
+    public function test_can_use_nested_options_without_keys(): void
     {
         $options = [
             'Ontario' => [
@@ -218,7 +224,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanMixNestedAndUnnestedOptions()
+    public function test_can_mix_nested_and_unnested_options(): void
     {
         $options = [
             'toronto' => 'Toronto',
@@ -235,7 +241,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSelectCanBeCreatedWithIntegerKeyValueOptions()
+    public function test_select_can_be_created_with_integer_key_value_options(): void
     {
         $select = new Select('color', ['0' => 'Red', '1' => 'Blue']);
         $expected = '<select name="color"><option value="0">Red</option><option value="1">Blue</option></select>';
@@ -248,7 +254,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSelectCanBeMultiple()
+    public function test_select_can_be_multiple(): void
     {
         $select = new Select('people');
         $expected = '<select name="people[]" multiple="multiple"></select>';
@@ -263,7 +269,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSelectMultipleElementsInMultiselects()
+    public function test_can_select_multiple_elements_in_multiselects(): void
     {
         $select = new Select('color', ['red' => 'Red', 'blue' => 'Blue']);
         $expected = '<select name="color[]" multiple="multiple"><option value="red" selected>Red</option><option value="blue" selected>Blue</option></select>';
@@ -272,7 +278,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testAgainstXSSAttacksInSelectOptions()
+    public function test_against_xss_attacks_in_select_options(): void
     {
         $select = new Select('animals', ['0"><script>alert("xss")</script>' => '<script>alert("xss")</script>']);
         $expected = '<select name="animals"><option value="0&quot;&gt;&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;">&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;</option></select>';

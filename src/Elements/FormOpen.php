@@ -9,9 +9,9 @@ class FormOpen extends Element
         'action' => '',
     ];
 
-    protected ?Hidden $token;
+    protected ?Hidden $token = null;
 
-    protected ?Hidden $hiddenMethod;
+    protected ?Hidden $hiddenMethod = null;
 
     public function render(): string
     {
@@ -25,17 +25,17 @@ class FormOpen extends Element
             $tags[] = $this->hiddenMethod->render();
         }
 
-        return implode($tags);
+        return implode('', $tags);
     }
 
     protected function hasToken(): bool
     {
-        return isset($this->token);
+        return $this->token instanceof Hidden;
     }
 
     protected function hasHiddenMethod(): bool
     {
-        return isset($this->hiddenMethod);
+        return $this->hiddenMethod instanceof Hidden;
     }
 
     public function post(): self

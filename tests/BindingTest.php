@@ -7,6 +7,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use TypiCMS\Form\FormBuilder;
+use TypiCMS\Form\OldInput\OldInputInterface;
 
 /**
  * @internal
@@ -15,22 +16,24 @@ use TypiCMS\Form\FormBuilder;
  */
 class BindingTest extends TestCase
 {
-    public function setUp(): void
+    protected FormBuilder $form;
+
+    protected function setUp(): void
     {
-        $this->form = new FormBuilder();
+        $this->form = new FormBuilder;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Mockery::close();
     }
 
-    public function testCanBindObject()
+    public function test_can_bind_object(): void
     {
         $this->assertTrue(method_exists($this->form, 'bind'));
     }
 
-    public function testBindEmail()
+    public function test_bind_email(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -40,7 +43,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindText()
+    public function test_bind_text(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -50,7 +53,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindTextWithIntegerZero()
+    public function test_bind_text_with_integer_zero(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -60,7 +63,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindNumber()
+    public function test_bind_number(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -70,7 +73,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindDate()
+    public function test_bind_date(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -80,7 +83,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindDateTimeLocal()
+    public function test_bind_date_time_local(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -90,7 +93,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindSelect()
+    public function test_bind_select(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -100,7 +103,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindMultipleSelect()
+    public function test_bind_multiple_select(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -114,7 +117,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindHidden()
+    public function test_bind_hidden(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -124,7 +127,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindCheckbox()
+    public function test_bind_checkbox(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -134,7 +137,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindCheckboxArray()
+    public function test_bind_checkbox_array(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -152,7 +155,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindUnsetProperty()
+    public function test_bind_unset_property(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -162,9 +165,9 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindMagicProperty()
+    public function test_bind_magic_property(): void
     {
-        $object = new MagicGetter();
+        $object = new MagicGetter;
         $this->form->bind($object);
 
         $expected = '<input type="text" name="not_magic" value="foo">';
@@ -176,7 +179,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindArray()
+    public function test_bind_array(): void
     {
         $array = ['first_name' => 'John'];
         $this->form->bind($array);
@@ -186,7 +189,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindArrayWithMissingKey()
+    public function test_bind_array_with_missing_key(): void
     {
         $array = ['first_name' => 'John'];
         $this->form->bind($array);
@@ -196,7 +199,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindNestedArray()
+    public function test_bind_nested_array(): void
     {
         $array = [
             'address' => [
@@ -219,7 +222,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindNestedArrayWithMissingKey()
+    public function test_bind_nested_array_with_missing_key(): void
     {
         $array = [
             'address' => [
@@ -236,7 +239,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindArrayWithZeroAsKey()
+    public function test_bind_array_with_zero_as_key(): void
     {
         $array = [
             'hotdog' => [
@@ -256,7 +259,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindNestedObject()
+    public function test_bind_nested_object(): void
     {
         $object = json_decode(json_encode([
             'address' => [
@@ -279,7 +282,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindNestedMixed()
+    public function test_bind_nested_mixed(): void
     {
         $object = [
             'address' => [
@@ -302,7 +305,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCloseUnbindsData()
+    public function test_close_unbinds_data(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -313,10 +316,11 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testAgainstXSSAttacksInBoundData()
+    public function test_against_xss_attacks_in_bound_data(): void
     {
         $object = $this->getStubObject();
         $object->first_name = '" onmouseover="alert(\'xss\')';
+
         $this->form->bind($object);
 
         $expected = '<input type="text" name="first_name" value="&quot; onmouseover=&quot;alert(&#039;xss&#039;)">';
@@ -324,7 +328,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testValueTakesPrecedenceOverBinding()
+    public function test_value_takes_precedence_over_binding(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -334,7 +338,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindingOnCheckboxTakesPrecedenceOverDefaultToChecked()
+    public function test_binding_on_checkbox_takes_precedence_over_default_to_checked(): void
     {
         $object = (object) ['published' => 1];
         $this->form->bind($object);
@@ -365,7 +369,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindingOnCheckboxTakesPrecedenceOverDefaultToUnchecked()
+    public function test_binding_on_checkbox_takes_precedence_over_default_to_unchecked(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -377,7 +381,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindingOnRadioTakesPrecedenceOverDefaultToChecked()
+    public function test_binding_on_radio_takes_precedence_over_default_to_checked(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -389,7 +393,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testBindingOnRadioTakesPrecedenceOverDefaultToUnchecked()
+    public function test_binding_on_radio_takes_precedence_over_default_to_unchecked(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -401,9 +405,9 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testOldInputTakesPrecedenceOverBinding()
+    public function test_old_input_takes_precedence_over_binding(): void
     {
-        $oldInput = Mockery::mock('TypiCMS\Form\OldInput\OldInputInterface');
+        $oldInput = Mockery::mock(OldInputInterface::class);
         $oldInput->shouldReceive('hasOldInput')->andReturn(true);
         $oldInput->shouldReceive('getOldInput')->with('first_name')->andReturn('Steve');
         $this->form->setOldInputProvider($oldInput);
@@ -416,7 +420,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testExplicitUncheckOnCheckboxTakesPrecedenceOverBinding()
+    public function test_explicit_uncheck_on_checkbox_takes_precedence_over_binding(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -426,7 +430,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testExplicitUncheckOnRadioTakesPrecedenceOverBinding()
+    public function test_explicit_uncheck_on_radio_takes_precedence_over_binding(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -436,7 +440,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testExplicitCheckOnCheckboxTakesPrecedenceOverBinding()
+    public function test_explicit_check_on_checkbox_takes_precedence_over_binding(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -446,7 +450,7 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testExplicitCheckOnRadioTakesPrecedenceOverBinding()
+    public function test_explicit_check_on_radio_takes_precedence_over_binding(): void
     {
         $object = $this->getStubObject();
         $this->form->bind($object);
@@ -456,9 +460,9 @@ class BindingTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    private function getStubObject()
+    private function getStubObject(): stdClass
     {
-        $obj = new stdClass();
+        $obj = new stdClass;
 
         $obj->email = 'johndoe@example.com';
         $obj->first_name = 'John';
@@ -481,7 +485,7 @@ class MagicGetter
 {
     public $not_magic = 'foo';
 
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return 'bar';
     }

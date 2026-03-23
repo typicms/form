@@ -18,22 +18,18 @@ class FormServiceProvider extends ServiceProvider implements DeferrableProvider
 
     protected function registerErrorStore(): void
     {
-        $this->app->singleton('typicms.form.errorstore', function ($app) {
-            return new IlluminateErrorStore($app['session.store']);
-        });
+        $this->app->singleton('typicms.form.errorstore', fn ($app): IlluminateErrorStore => new IlluminateErrorStore($app['session.store']));
     }
 
     protected function registerOldInput(): void
     {
-        $this->app->singleton('typicms.form.oldinput', function ($app) {
-            return new IlluminateOldInputProvider($app['session.store']);
-        });
+        $this->app->singleton('typicms.form.oldinput', fn ($app): IlluminateOldInputProvider => new IlluminateOldInputProvider($app['session.store']));
     }
 
     protected function registerFormBuilder(): void
     {
-        $this->app->singleton('typicms.form', function ($app) {
-            $formBuilder = new FormBuilder();
+        $this->app->singleton('typicms.form', function (array $app): FormBuilder {
+            $formBuilder = new FormBuilder;
             $formBuilder->setErrorStore($app['typicms.form.errorstore']);
             $formBuilder->setOldInputProvider($app['typicms.form.oldinput']);
             $formBuilder->setToken($app['session.store']->token());

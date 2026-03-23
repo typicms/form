@@ -3,7 +3,9 @@
 namespace TypiCMS\Form\Tests;
 
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use TypiCMS\Form\ErrorStore\ErrorStoreInterface;
 use TypiCMS\Form\FormBuilder;
 
 /**
@@ -13,36 +15,39 @@ use TypiCMS\Form\FormBuilder;
  */
 class FormBuilderTest extends TestCase
 {
-    public function setUp(): void
+    protected FormBuilder $form;
+
+    protected function setUp(): void
     {
-        $this->form = new FormBuilder();
+        $this->form = new FormBuilder;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Mockery::close();
     }
 
-    public function testFormBuilderCanBeCreated()
+    public function test_form_builder_can_be_created(): void
     {
-        $formBuilder = new FormBuilder();
+        $formBuilder = new FormBuilder;
+        $this->assertNotNull($formBuilder);
     }
 
-    public function testFormOpen()
+    public function test_form_open(): void
     {
         $expected = '<form method="POST" action="">';
         $result = (string) $this->form->open();
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanCloseForm()
+    public function test_can_close_form(): void
     {
         $expected = '</form>';
-        $result = (string) $this->form->close();
+        $result = $this->form->close();
         $this->assertEquals($expected, $result);
     }
 
-    public function testTextBox()
+    public function test_text_box(): void
     {
         $expected = '<input type="text" name="email">';
         $result = (string) $this->form->text('email');
@@ -53,7 +58,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testNumber()
+    public function test_number(): void
     {
         $expected = '<input type="number" name="number">';
         $result = (string) $this->form->number('number');
@@ -64,7 +69,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testPassword()
+    public function test_password(): void
     {
         $expected = '<input type="password" name="password">';
         $result = (string) $this->form->password('password');
@@ -75,7 +80,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCheckbox()
+    public function test_checkbox(): void
     {
         $expected = '<input type="checkbox" name="terms" value="1">';
         $result = (string) $this->form->checkbox('terms');
@@ -90,7 +95,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testRadio()
+    public function test_radio(): void
     {
         $expected = '<input type="radio" name="terms" value="terms">';
         $result = (string) $this->form->radio('terms');
@@ -105,34 +110,28 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSubmit()
+    public function test_submit(): void
     {
         $expected = '<button type="submit">Sign In</button>';
         $result = (string) $this->form->submit('Sign In');
         $this->assertEquals($expected, $result);
     }
 
-    public function testReset()
+    public function test_reset(): void
     {
         $expected = '<button type="reset">Reset</button>';
         $result = (string) $this->form->reset('Reset');
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @dataProvider buttonProvider
-     *
-     * @param mixed $value
-     * @param mixed $name
-     * @param mixed $expected
-     */
-    public function testButton($value, $name, $expected)
+    #[DataProvider('buttonProvider')]
+    public function test_button(string $value, ?string $name, string $expected): void
     {
         $result = (string) $this->form->button($value, $name);
         $this->assertEquals($expected, $result);
     }
 
-    public function buttonProvider()
+    public static function buttonProvider(): array
     {
         return [
             ['Click Me', 'click-me', '<button type="button" name="click-me">Click Me</button>'],
@@ -140,7 +139,7 @@ class FormBuilderTest extends TestCase
         ];
     }
 
-    public function testSelect()
+    public function test_select(): void
     {
         $expected = '<select name="color"><option value="red">Red</option><option value="blue">Blue</option></select>';
         $result = (string) $this->form->select('color', ['red' => 'Red', 'blue' => 'Blue']);
@@ -151,7 +150,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTextArea()
+    public function test_text_area(): void
     {
         $expected = '<textarea name="bio" rows="10" cols="50"></textarea>';
         $result = (string) $this->form->textarea('bio');
@@ -162,7 +161,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testLabel()
+    public function test_label(): void
     {
         $expected = '<label>Email</label>';
         $result = (string) $this->form->label('Email');
@@ -173,30 +172,30 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testRenderCheckboxAgainstBinaryZero()
+    public function test_render_checkbox_against_binary_zero(): void
     {
         $expected = '<input type="checkbox" name="boolean" value="0">';
         $result = (string) $this->form->checkbox('boolean', 0);
         $this->assertEquals($expected, $result);
     }
 
-    public function testRenderRadioAgainstBinaryZero()
+    public function test_render_radio_against_binary_zero(): void
     {
         $expected = '<input type="radio" name="boolean" value="0">';
         $result = (string) $this->form->radio('boolean', 0);
         $this->assertEquals($expected, $result);
     }
 
-    public function testNoErrorStoreReturnsNull()
+    public function test_no_error_store_returns_null(): void
     {
         $expected = '';
         $result = (string) $this->form->getError('email');
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanCheckForErrorMessage()
+    public function test_can_check_for_error_message(): void
     {
-        $errorStore = Mockery::mock('TypiCMS\Form\ErrorStore\ErrorStoreInterface');
+        $errorStore = Mockery::mock(ErrorStoreInterface::class);
         $errorStore->shouldReceive('hasError')->with('email')->andReturn(true);
 
         $this->form->setErrorStore($errorStore);
@@ -204,7 +203,7 @@ class FormBuilderTest extends TestCase
         $result = $this->form->hasError('email');
         $this->assertTrue($result);
 
-        $errorStore = Mockery::mock('TypiCMS\Form\ErrorStore\ErrorStoreInterface');
+        $errorStore = Mockery::mock(ErrorStoreInterface::class);
         $errorStore->shouldReceive('hasError')->with('email')->andReturn(false);
 
         $this->form->setErrorStore($errorStore);
@@ -213,9 +212,9 @@ class FormBuilderTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testCanRetrieveErrorMessage()
+    public function test_can_retrieve_error_message(): void
     {
-        $errorStore = Mockery::mock('TypiCMS\Form\ErrorStore\ErrorStoreInterface');
+        $errorStore = Mockery::mock(ErrorStoreInterface::class);
         $errorStore->shouldReceive('hasError')->andReturn(true);
         $errorStore->shouldReceive('getError')->with('email')->andReturn('The e-mail address is invalid.');
 
@@ -226,9 +225,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanRetrieveFormattedErrorMessage()
+    public function test_can_retrieve_formatted_error_message(): void
     {
-        $errorStore = Mockery::mock('TypiCMS\Form\ErrorStore\ErrorStoreInterface');
+        $errorStore = Mockery::mock(ErrorStoreInterface::class);
         $errorStore->shouldReceive('hasError')->andReturn(true);
         $errorStore->shouldReceive('getError')->with('email')->andReturn('The e-mail address is invalid.');
 
@@ -239,9 +238,9 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFormattedErrorMessageReturnsNothingIfNoError()
+    public function test_formatted_error_message_returns_nothing_if_no_error(): void
     {
-        $errorStore = Mockery::mock('TypiCMS\Form\ErrorStore\ErrorStoreInterface');
+        $errorStore = Mockery::mock(ErrorStoreInterface::class);
         $errorStore->shouldReceive('hasError')->with('email')->andReturn(false);
 
         $this->form->setErrorStore($errorStore);
@@ -251,7 +250,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHidden()
+    public function test_hidden(): void
     {
         $expected = '<input type="hidden" name="secret">';
         $result = (string) $this->form->hidden('secret');
@@ -262,7 +261,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFile()
+    public function test_file(): void
     {
         $expected = '<input type="file" name="photo">';
         $result = (string) $this->form->file('photo');
@@ -273,7 +272,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDate()
+    public function test_date(): void
     {
         $expected = '<input type="date" name="date_of_birth">';
         $result = (string) $this->form->date('date_of_birth');
@@ -284,7 +283,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDateTimeLocal()
+    public function test_date_time_local(): void
     {
         $expected = '<input type="datetime-local" name="date_and_time_of_birth">';
         $result = (string) $this->form->dateTimeLocal('date_and_time_of_birth');
@@ -295,7 +294,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testEmail()
+    public function test_email(): void
     {
         $expected = '<input type="email" name="email">';
         $result = (string) $this->form->email('email');
@@ -306,12 +305,14 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanSetCsrfToken()
+    public function test_can_set_csrf_token(): void
     {
         $this->form->setToken('12345');
+        $expected = '<input type="hidden" name="_token" value="12345">';
+        $this->assertEquals($expected, (string) $this->form->token());
     }
 
-    public function testCanRenderCsrfToken()
+    public function test_can_render_csrf_token(): void
     {
         $this->form->setToken('12345');
 
@@ -320,7 +321,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTokenIsRenderedAutomaticallyOnOpenIfSet()
+    public function test_token_is_rendered_automatically_on_open_if_set(): void
     {
         $this->form->setToken('12345');
 
@@ -329,7 +330,7 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTokenIsNotRenderedAutomaticallyOnOpenFormWithGetMethodIfSet()
+    public function test_token_is_not_rendered_automatically_on_open_form_with_get_method_if_set(): void
     {
         $this->form->setToken('12345');
 
@@ -338,28 +339,28 @@ class FormBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSelectMonth()
+    public function test_select_month(): void
     {
         $expected = '<select name="month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>';
         $result = (string) $this->form->selectMonth('month');
         $this->assertEquals($expected, $result);
     }
 
-    public function testRemoveClass()
+    public function test_remove_class(): void
     {
         $expected = '<input type="text" name="food">';
         $result = (string) $this->form->text('food')->addClass('sandwich pizza')->removeClass('sandwich')->removeClass('pizza');
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetTypeAttribute()
+    public function test_get_type_attribute(): void
     {
         $expected = 'radio';
         $result = $this->form->radio('fm-transmission')->getAttribute('type');
         $this->assertEquals($expected, $result);
     }
 
-    public function testAgainstXSSAttacksInAttributes()
+    public function test_against_xss_attacks_in_attributes(): void
     {
         $expected = '<input type="text" name="meme" lol="catz&quot;&gt;&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;">';
         $result = $this->form->text('meme')->lol('catz"><script>alert("xss")</script>');

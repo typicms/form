@@ -14,12 +14,12 @@ class HiddenTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Hidden
     {
         return new Hidden($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'hidden';
     }

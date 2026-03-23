@@ -8,12 +8,7 @@ class Label extends Element
 
     protected ?bool $labelBefore = null;
 
-    protected string $label;
-
-    public function __construct(string $label)
-    {
-        $this->label = $label;
-    }
+    public function __construct(protected string $label) {}
 
     public function render(): string
     {
@@ -25,13 +20,13 @@ class Label extends Element
 
         $tags[] = $this->renderElement();
 
-        if (!$this->labelBefore) {
+        if (! $this->labelBefore) {
             $tags[] = $this->label;
         }
 
         $tags[] = '</label>';
 
-        return implode($tags);
+        return implode('', $tags);
     }
 
     public function forId(string $name): self
@@ -59,7 +54,7 @@ class Label extends Element
 
     protected function renderElement(): string
     {
-        if (!$this->element) {
+        if (! $this->element instanceof Element) {
             return '';
         }
 

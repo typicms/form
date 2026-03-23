@@ -8,7 +8,7 @@ class Checkbox extends Input
         'type' => 'checkbox',
     ];
 
-    protected ?bool $checked;
+    protected ?bool $checked = null;
 
     protected mixed $oldValue = null;
 
@@ -31,7 +31,7 @@ class Checkbox extends Input
 
     public function defaultToChecked(): self
     {
-        if (!isset($this->checked) && is_null($this->oldValue)) {
+        if ($this->checked === null && is_null($this->oldValue)) {
             $this->check();
         }
 
@@ -40,7 +40,7 @@ class Checkbox extends Input
 
     public function defaultToUnchecked(): self
     {
-        if (!isset($this->checked) && is_null($this->oldValue)) {
+        if ($this->checked === null && is_null($this->oldValue)) {
             $this->uncheck();
         }
 
@@ -80,17 +80,19 @@ class Checkbox extends Input
         }
     }
 
-    protected function checkBinding()
+    protected function checkBinding(): ?Checkbox
     {
-        $currentValue = (string) $this->getAttribute('value');
+        $currentValue = $this->getAttribute('value');
 
         $oldValue = $this->oldValue;
         $oldValue = is_array($oldValue) ? $oldValue : [$oldValue];
-        $oldValue = array_map('strval', $oldValue);
+        $oldValue = array_map(strval(...), $oldValue);
 
         if (in_array($currentValue, $oldValue)) {
             return $this->check();
         }
+
+        return null;
     }
 
     public function render(): string

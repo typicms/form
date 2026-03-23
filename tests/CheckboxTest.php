@@ -14,22 +14,22 @@ class CheckboxTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Checkbox
     {
         return new Checkbox($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'checkbox';
     }
 
-    protected function getTestSubjectTag()
+    protected function getTestSubjectTag(): string
     {
         return 'input';
     }
 
-    public function testCanCheckCheckbox()
+    public function test_can_check_checkbox(): void
     {
         $checkbox = new Checkbox('terms');
         $expected = '<input type="checkbox" name="terms" value="1" checked="checked">';
@@ -38,7 +38,7 @@ class CheckboxTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanUncheckCheckbox()
+    public function test_can_uncheck_checkbox(): void
     {
         $checkbox = new Checkbox('above_18');
         $expected = '<input type="checkbox" name="above_18" value="1">';
@@ -47,7 +47,7 @@ class CheckboxTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDefaultToChecked()
+    public function test_default_to_checked(): void
     {
         $checkbox = new Checkbox('above_18');
         $expected = '<input type="checkbox" name="above_18" value="1" checked="checked">';
@@ -68,7 +68,7 @@ class CheckboxTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDefaultToUnchecked()
+    public function test_default_to_unchecked(): void
     {
         $checkbox = new Checkbox('above_18');
         $expected = '<input type="checkbox" name="above_18" value="1">';
@@ -89,7 +89,7 @@ class CheckboxTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDefaultCheckedState()
+    public function test_default_checked_state(): void
     {
         $checkbox = new Checkbox('above_18');
         $expected = '<input type="checkbox" name="above_18" value="1" checked="checked">';

@@ -35,7 +35,7 @@ class Select extends FormControl
 
     public function render(): string
     {
-        return implode([
+        return implode('', [
             sprintf('<select%s>', $this->renderAttributes()),
             $this->renderOptions(),
             '</select>',
@@ -46,7 +46,7 @@ class Select extends FormControl
     {
         [$values, $labels] = $this->splitKeysAndValues($this->options);
 
-        $tags = array_map(function ($value, $label) {
+        $tags = array_map(function (string $value, $label): string {
             if (is_array($label)) {
                 return $this->renderOptGroup($value, $label);
             }
@@ -54,20 +54,18 @@ class Select extends FormControl
             return $this->renderOption($value, $label);
         }, $values, $labels);
 
-        return implode($tags);
+        return implode('', $tags);
     }
 
     protected function renderOptGroup(string $label, array $options): string
     {
         [$values, $labels] = $this->splitKeysAndValues($options);
 
-        $options = array_map(function ($value, $label) {
-            return $this->renderOption($value, $label);
-        }, $values, $labels);
+        $options = array_map(fn (string $value, string $label): string => $this->renderOption($value, $label), $values, $labels);
 
-        return implode([
+        return implode('', [
             sprintf('<optgroup label="%s">', $label),
-            implode($options),
+            implode('', $options),
             '</optgroup>',
         ]);
     }
@@ -95,7 +93,7 @@ class Select extends FormControl
 
     public function defaultValue(string|array $value): self
     {
-        if (isset($this->selected)) {
+        if ($this->selected !== null) {
             return $this;
         }
 
@@ -107,7 +105,7 @@ class Select extends FormControl
     public function multiple(): self
     {
         $name = $this->attributes['name'];
-        if (mb_substr($name, -2) != '[]') {
+        if (mb_substr((string) $name, -2) !== '[]') {
             $name .= '[]';
         }
 

@@ -6,16 +6,11 @@ use Illuminate\Session\Store as Session;
 
 class IlluminateErrorStore implements ErrorStoreInterface
 {
-    private Session $session;
-
-    public function __construct(Session $session)
-    {
-        $this->session = $session;
-    }
+    public function __construct(private readonly Session $session) {}
 
     public function hasError(string $key): bool
     {
-        if (!$this->hasErrors()) {
+        if (! $this->hasErrors()) {
             return false;
         }
 
@@ -26,7 +21,7 @@ class IlluminateErrorStore implements ErrorStoreInterface
 
     public function getError(string $key): ?string
     {
-        if (!$this->hasError($key)) {
+        if (! $this->hasError($key)) {
             return null;
         }
 

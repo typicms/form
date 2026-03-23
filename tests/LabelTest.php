@@ -4,6 +4,7 @@ namespace TypiCMS\Form\Tests;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use TypiCMS\Form\Elements\Element;
 use TypiCMS\Form\Elements\Label;
 
 /**
@@ -13,17 +14,18 @@ use TypiCMS\Form\Elements\Label;
  */
 class LabelTest extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Mockery::close();
     }
 
-    public function testLabelCanBeCreated()
+    public function test_label_can_be_created(): void
     {
         $label = new Label('Email');
+        $this->assertNotNull($label);
     }
 
-    public function testRenderBasicLabel()
+    public function test_render_basic_label(): void
     {
         $label = new Label('Email');
         $expected = '<label>Email</label>';
@@ -38,7 +40,7 @@ class LabelTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanRenderForId()
+    public function test_can_render_for_id(): void
     {
         $label = new Label('Email');
 
@@ -55,9 +57,9 @@ class LabelTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanWrapBeforeElement()
+    public function test_can_wrap_before_element(): void
     {
-        $element = Mockery::mock('TypiCMS\Form\Elements\Element');
+        $element = Mockery::mock(Element::class);
         $element->shouldReceive('render')->once()->andReturn('<input>');
         $label = new Label('Email');
 
@@ -66,9 +68,9 @@ class LabelTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanWrapAfterElement()
+    public function test_can_wrap_after_element(): void
     {
-        $element = Mockery::mock('TypiCMS\Form\Elements\Element');
+        $element = Mockery::mock(Element::class);
         $element->shouldReceive('render')->once()->andReturn('<input>');
         $label = new Label('Email');
 
@@ -77,9 +79,9 @@ class LabelTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanRetrieveElement()
+    public function test_can_retrieve_element(): void
     {
-        $element = Mockery::mock('TypiCMS\Form\Elements\Element');
+        $element = Mockery::mock(Element::class);
         $label = new Label('Email');
         $result = $label->after($element)->getControl();
         $this->assertEquals($element, $result);

@@ -4,12 +4,7 @@ namespace TypiCMS\Form\Binding;
 
 class BoundData
 {
-    protected mixed $data;
-
-    public function __construct(mixed $data)
-    {
-        $this->data = $data;
-    }
+    public function __construct(protected mixed $data) {}
 
     public function get(string $name, mixed $default = null): mixed
     {
@@ -30,7 +25,7 @@ class BoundData
 
     protected function dataGet(mixed $target, array $keyParts, mixed $default): mixed
     {
-        if (count($keyParts) == 0) {
+        if ($keyParts === []) {
             return $target;
         }
 
@@ -49,7 +44,7 @@ class BoundData
     {
         $key = array_shift($keyParts);
 
-        if (!isset($target[$key])) {
+        if (! isset($target[$key])) {
             return $default;
         }
 
@@ -60,7 +55,7 @@ class BoundData
     {
         $key = array_shift($keyParts);
 
-        if (!(property_exists($target, $key) || method_exists($target, '__get'))) {
+        if (! property_exists($target, $key) && ! method_exists($target, '__get')) {
             return $default;
         }
 

@@ -14,7 +14,7 @@ class TextArea extends FormControl
 
     public function render(): string
     {
-        return implode([
+        return implode('', [
             sprintf('<textarea%s>', $this->renderAttributes()),
             $this->escape($this->value),
             '</textarea>',
@@ -51,7 +51,7 @@ class TextArea extends FormControl
 
     public function defaultValue(string $value): self
     {
-        if (!$this->hasValue()) {
+        if (! $this->hasValue()) {
             $this->value($value);
         }
 
@@ -60,6 +60,6 @@ class TextArea extends FormControl
 
     protected function hasValue(): bool
     {
-        return isset($this->value);
+        return $this->value !== null;
     }
 }

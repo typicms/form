@@ -14,12 +14,12 @@ class FileTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): File
     {
         return new File($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'file';
     }

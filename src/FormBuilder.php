@@ -23,13 +23,13 @@ use TypiCMS\Form\OldInput\OldInputInterface;
 
 class FormBuilder
 {
-    protected ?OldInputInterface $oldInput;
+    protected ?OldInputInterface $oldInput = null;
 
-    protected ?ErrorStoreInterface $errorStore;
+    protected ?ErrorStoreInterface $errorStore = null;
 
-    protected ?string $csrfToken;
+    protected ?string $csrfToken = null;
 
-    protected ?BoundData $boundData;
+    protected ?BoundData $boundData = null;
 
     public function setOldInputProvider(OldInputInterface $oldInputProvider): void
     {
@@ -48,7 +48,7 @@ class FormBuilder
 
     public function open(): FormOpen
     {
-        $open = new FormOpen();
+        $open = new FormOpen;
 
         if ($this->hasToken()) {
             $open->token($this->csrfToken);
@@ -59,7 +59,7 @@ class FormBuilder
 
     protected function hasToken(): bool
     {
-        return isset($this->csrfToken);
+        return $this->csrfToken !== null;
     }
 
     public function close(): string
@@ -73,7 +73,7 @@ class FormBuilder
     {
         $text = new Text($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $text->value($value);
         }
 
@@ -84,7 +84,7 @@ class FormBuilder
     {
         $number = new Number($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $number->value($value);
         }
 
@@ -95,7 +95,7 @@ class FormBuilder
     {
         $date = new Date($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $date->value($value);
         }
 
@@ -106,7 +106,7 @@ class FormBuilder
     {
         $date = new DateTimeLocal($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $date->value($value);
         }
 
@@ -117,7 +117,7 @@ class FormBuilder
     {
         $email = new Email($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $email->value($value);
         }
 
@@ -128,7 +128,7 @@ class FormBuilder
     {
         $hidden = new Hidden($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $hidden->value($value);
         }
 
@@ -139,7 +139,7 @@ class FormBuilder
     {
         $textarea = new TextArea($name);
 
-        if (!is_null($value = $this->getValueFor($name))) {
+        if (! is_null($value = $this->getValueFor($name))) {
             $textarea->value($value);
         }
 
@@ -161,7 +161,7 @@ class FormBuilder
         return $checkbox;
     }
 
-    public function radio(string $name, int|string $value = null): RadioButton
+    public function radio(string $name, int|string|null $value = null): RadioButton
     {
         $radio = new RadioButton($name, $value);
 
@@ -171,7 +171,7 @@ class FormBuilder
         return $radio;
     }
 
-    public function button(string $value, string $name = null): Button
+    public function button(string $value, ?string $name = null): Button
     {
         return new Button($value, $name);
     }
@@ -216,7 +216,7 @@ class FormBuilder
     {
         $token = $this->hidden('_token');
 
-        if (isset($this->csrfToken)) {
+        if ($this->csrfToken !== null) {
             $token->value($this->csrfToken);
         }
 
@@ -225,7 +225,7 @@ class FormBuilder
 
     public function hasError(string $name): bool
     {
-        if (!isset($this->errorStore)) {
+        if (! $this->errorStore instanceof ErrorStoreInterface) {
             return false;
         }
 
@@ -234,18 +234,18 @@ class FormBuilder
 
     public function getError(string $name, ?string $format = null): ?string
     {
-        if (!isset($this->errorStore)) {
+        if (! $this->errorStore instanceof ErrorStoreInterface) {
             return null;
         }
 
-        if (!$this->hasError($name)) {
+        if (! $this->hasError($name)) {
             return '';
         }
 
         $message = $this->errorStore->getError($name);
 
         if ($format) {
-            $message = str_replace(':message', $message, $format);
+            return str_replace(':message', $message, $format);
         }
 
         return $message;
@@ -269,7 +269,7 @@ class FormBuilder
 
     protected function hasOldInput(): bool
     {
-        if (!isset($this->oldInput)) {
+        if (! $this->oldInput instanceof OldInputInterface) {
             return false;
         }
 
@@ -283,7 +283,7 @@ class FormBuilder
 
     protected function hasBoundData(): bool
     {
-        return isset($this->boundData);
+        return $this->boundData instanceof BoundData;
     }
 
     protected function getBoundValue(string $name, ?string $default): mixed

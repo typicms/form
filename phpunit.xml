@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
+<phpunit
+    backupGlobals="false"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    processIsolation="false"
+    stopOnFailure="false"
 >
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">./src</directory>
         </include>
@@ -17,10 +14,12 @@
             <file>./src/FormServiceProvider.php</file>
             <file>./src/Facades/Form.php</file>
         </exclude>
-    </coverage>
+    </source>
     <testsuites>
         <testsuite name="Package Test Suite">
-            <directory suffix=".php">./tests/</directory>
+            <directory suffix="Test.php">./tests/</directory>
+            <exclude>./tests/InputContractTest.php</exclude>
+            <exclude>./tests/TextSubclassContractTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

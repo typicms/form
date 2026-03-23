@@ -1,7 +1,9 @@
 # Form
 
-[![Actions Status](https://github.com/TypiCMS/form/workflows/run-tests/badge.svg)](https://github.com/TypiCMS/form/actions)
-[![Coverage Status](https://coveralls.io/repos/github/TypiCMS/form/badge.svg?branch=master)](https://coveralls.io/github/TypiCMS/form?branch=master)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/typicms/form.svg)](https://packagist.org/packages/typicms/form)
+[![tests](https://github.com/typicms/form/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/typicms/form/actions/workflows/tests.yml)
+[![Rector](https://github.com/typicms/form/actions/workflows/rector.yml/badge.svg?branch=main)](https://github.com/typicms/form/actions/workflows/rector.yml)
+[![Pint](https://github.com/typicms/form/actions/workflows/pint.yml/badge.svg?branch=main)](https://github.com/typicms/form/actions/workflows/pint.yml)
 
 Build HTML form with an intuitive syntax.
 

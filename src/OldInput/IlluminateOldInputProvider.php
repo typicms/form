@@ -6,16 +6,11 @@ use Illuminate\Session\Store as Session;
 
 class IlluminateOldInputProvider implements OldInputInterface
 {
-    private Session $session;
-
-    public function __construct(Session $session)
-    {
-        $this->session = $session;
-    }
+    public function __construct(private readonly Session $session) {}
 
     public function hasOldInput(): bool
     {
-        return ($this->session->get('_old_input')) ? true : false;
+        return (bool) $this->session->get('_old_input');
     }
 
     public function getOldInput(string $key): mixed

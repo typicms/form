@@ -14,12 +14,12 @@ class TextTest extends TestCase
 {
     use TextSubclassContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): Text
     {
         return new Text($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType(): string
     {
         return 'text';
     }

@@ -14,21 +14,19 @@ class TextAreaTest extends TestCase
 {
     use InputContractTest;
 
-    protected function newTestSubjectInstance($name)
+    protected function newTestSubjectInstance($name): TextArea
     {
         return new TextArea($name);
     }
 
-    protected function getTestSubjectType()
+    protected function getTestSubjectType() {}
+
+    protected function elementRegExp(string $attributes): string
     {
+        return '/\A<textarea .*?'.$attributes.'( .*?|)><\/textarea>\z/';
     }
 
-    protected function elementRegExp($attributes)
-    {
-        return '/\A<textarea .*?' . $attributes . '( .*?|)><\/textarea>\z/';
-    }
-
-    public function testRenderBasicTextArea()
+    public function test_render_basic_text_area(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="10" cols="50"></textarea>';
@@ -43,7 +41,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testRenderWithCustomRows()
+    public function test_render_with_custom_rows(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="5" cols="50"></textarea>';
@@ -58,7 +56,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testRenderWithCustomCols()
+    public function test_render_with_custom_cols(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="10" cols="30"></textarea>';
@@ -73,7 +71,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanRenderWithValue()
+    public function test_can_render_with_value(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="10" cols="50">Sample text</textarea>';
@@ -88,7 +86,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testRenderWithPlaceholder()
+    public function test_render_with_placeholder(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="10" cols="50" placeholder="Your bio"></textarea>';
@@ -103,7 +101,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDefaultValue()
+    public function test_default_value(): void
     {
         $textarea = new TextArea('bio');
         $expected = '<textarea name="bio" rows="10" cols="50">My information</textarea>';
@@ -142,7 +140,7 @@ class TextAreaTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanAddAttributesThroughMagicMethods()
+    public function test_can_add_attributes_through_magic_methods(): void
     {
         $text = new TextArea('bio');
         $text = $text->maxlength('5');

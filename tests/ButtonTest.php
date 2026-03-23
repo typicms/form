@@ -12,12 +12,13 @@ use TypiCMS\Form\Elements\Button;
  */
 class ButtonTest extends TestCase
 {
-    public function testButtonCanBeCreated()
+    public function test_button_can_be_created(): void
     {
         $submit = new Button('Click Me', 'click-me');
+        $this->assertNotNull($submit);
     }
 
-    public function testRenderBasicButton()
+    public function test_render_basic_button(): void
     {
         $button = new Button('Click Me', 'click-me');
         $expected = '<button type="button" name="click-me">Click Me</button>';
@@ -26,10 +27,11 @@ class ButtonTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCanChangeValue()
+    public function test_can_change_value(): void
     {
         $button = new Button('Button');
         $button->value('Click Me');
+
         $expected = '<button type="button">Click Me</button>';
         $result = $button->render();
 
